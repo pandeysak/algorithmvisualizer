@@ -1,143 +1,110 @@
-var container = document.getElementById("array");
+let isSorting = false;
+let sortSteps = [];
+let canvas, ctx, width, height, barWidth, max;
 
-// Function to generate the array of blocks
-function generatearray() {
-	for (var i = 0; i < 20; i++) {
-		// Return a value from 1 to 100 (both inclusive)
-		var value = Math.ceil(Math.random() * 100);
+function visualizeQuickSort() {
+  if (isSorting) {
+    return;
+  }
 
-		// Creating element div
-		var array_ele = document.createElement("div");
+  const arrayInput = document.getElementById('array-input').value.trim();
+  const array = arrayInput.split(',').map(Number);
+  if (array.some(isNaN)) {
+    alert('Please enter valid numbers for array elements.');
+    return;
+  }
 
-		// Adding class 'block' to div
-		array_ele.classList.add("block");
+  isSorting = true;
+  document.getElementById('visualize-button').disabled = true;
 
-		// Adding style to div
-		array_ele.style.height =
-		`${value * 3}px`;
-		array_ele.style.transform =
-		`translate(${i * 30}px)`;
+  sortSteps = [];
+  quickSort(array, 0, array.length - 1);
 
-		// Creating label element for displaying
-		// size of particular block
-		var array_ele_label =
-		document.createElement("label");
-		array_ele_label.classList.add("block_id");
-		array_ele_label.innerText = value;
-
-		// Appending created elements to index.html
-		array_ele.appendChild(array_ele_label);
-		container.appendChild(array_ele);
-	}
+  setupCanvas();
+  animateSortSteps();
 }
 
-// Function to generate indexes
-var count_container = document.getElementById("count");
-
-function generate_idx() {
-	for (var i = 0; i < 20; i++) {
-		// Creating element div
-		var array_ele2 = document.createElement("div");
-
-		// Adding class 'block2' to div
-		array_ele2.classList.add("block2");
-
-		// Adding style to div
-		array_ele2.style.height =
-		`${20}px`;
-		array_ele2.style.transform =
-		`translate(${i * 30}px)`;
-
-		//adding indexes
-		var array_ele_label2 =
-		document.createElement("label");
-		array_ele_label2.classList.add("block_id3");
-		array_ele_label2.innerText = i;
-
-		// Appending created elements to index.html
-		array_ele2.appendChild(array_ele_label2);
-		count_container.appendChild(array_ele2);
-	}
+function quickSort(array, low, high) {
+  if (low < high) {
+    const pivotIndex = partition(array, low, high);
+    quickSort(array, low, pivotIndex - 1);
+    quickSort(array, pivotIndex + 1, high);
+  }
 }
 
-async function hoare_partition(l, r, delay = 700) {
-	var blocks =
-	document.querySelectorAll(".block");
-	var pivot =
-	Number(blocks[l].childNodes[0].innerHTML);
+function partition(array, low, high) {
+  const pivot = array[high];
+  let i = low - 1;
 
-	var i = l - 1;
-	var j = r + 1;
+  for (let j = low; j < high; j++) {
+    sortSteps.push({ array: array.slice(), low, high, pivotIndex: i + 1, currentIndex: j });
 
-	while (true) {
-		// Find leftmost element greater than
-		// or equal to pivot
-		do {
-			i++;
-			if (i - 1 >= l) blocks[i - 1].style.backgroundColor = "red";
-			blocks[i].style.backgroundColor = "yellow";
-			//To wait for 700 milliseconds
-			await new Promise((resolve) =>
-				setTimeout(() => {
-					resolve();
-				}, delay)
-			);
-		} while (Number(blocks[i].childNodes[0].innerHTML) < pivot);
+    if (array[j] < pivot) {
+      i++;
+      [array[i], array[j]] = [array[j], array[i]];
+      sortSteps.push({ array: array.slice(), low, high, pivotIndex: i + 1, currentIndex: j });
+    }
+  }
 
-		// Find rightmost element smaller than
-		// or equal to pivot
-		do {
-			j--;
-			if (j + 1 <= r) blocks[j + 1].style.backgroundColor = "green";
-			blocks[j].style.backgroundColor = "yellow";
-			//To wait for 700 milliseconds
-			await new Promise((resolve) =>
-				setTimeout(() => {
-					resolve();
-				}, delay)
-			);
-		} while (Number(blocks[j].childNodes[0].innerHTML) > pivot);
+  [array[i + 1], array[high]] = [array[high], array[i + 1]];
+  sortSteps.push({ array: array.slice(), low, high, pivotIndex: i + 1, currentIndex: high });
 
-		// If two pointers met.
-		if (i >= j) {
-			for (var k = 0; k < 20; k++) blocks[k].style.backgroundColor = "#6b5b95";
-			return j;
-		}
-
-		//swapping ith and jth element
-		var temp1 = blocks[i].style.height;
-		var temp2 = blocks[i].childNodes[0].innerText;
-		blocks[i].style.height = blocks[j].style.height;
-		blocks[j].style.height = temp1;
-		blocks[i].childNodes[0].innerText = blocks[j].childNodes[0].innerText;
-		blocks[j].childNodes[0].innerText = temp2;
-		//To wait for 700 milliseconds
-		await new Promise((resolve) =>
-			setTimeout(() => {
-				resolve();
-			}, delay)
-		);
-	}
+  return i + 1;
 }
 
-// Asynchronous QuickSort function
-async function QuickSort(l, r, delay = 100) {
-	// QuickSort Algorithm
-	if (l < r) {
-		//Storing the index of pivot element after partition
-		var pivot_idx = await hoare_partition(l, r);
-		//Recursively calling quicksort for left partition
-		await QuickSort(l, pivot_idx);
-		//Recursively calling quicksort for right partition
-		await QuickSort(pivot_idx + 1, r);
-	}
+function setupCanvas() {
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  width = canvas.width;
+  height = canvas.height;
+  barWidth = 40;
+  max = Math.max(...sortSteps[0].array);
 }
 
-// Calling generatearray function
-generatearray();
+function animateSortSteps() {
+  const step = sortSteps.shift();
 
-// Calling generate_idx function
-generate_idx();
+  if (!step) {
+    isSorting = false;
+    document.getElementById('visualize-button').disabled = false;
+    return;
+  }
 
-// Calling QuickSort function
-QuickSort(0, 19);
+  const { array, low, high, pivotIndex, currentIndex } = step;
+  const barHeightUnit = height / max;
+
+  ctx.clearRect(0, 0, width, height);
+
+  for (let i = 0; i < array.length; i++) {
+    const barHeight = array[i] * barHeightUnit;
+    const x = (i * (barWidth + 10)) + 50;
+    const y = height - barHeight;
+
+    ctx.fillStyle = 'blue';
+    if (currentIndex === i) {
+      ctx.fillStyle = 'green';
+    } else if (i === pivotIndex) {
+      ctx.fillStyle = 'red';
+    } else if (i >= low && i <= high) {
+      ctx.fillStyle = 'yellow';
+    }
+    ctx.fillRect(x, y, barWidth, barHeight);
+
+    ctx.fillStyle = 'black';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(array[i], x + barWidth / 2, y - 5);
+  }
+
+  setTimeout(animateSortSteps, 1000); // Add a delay to show each step clearly
+}
+
+function goBackToHomePage() {
+  window.location.href = 'sorting.html';
+}
+
+// Automatically scroll down to the visualization section on "Visualize" button click
+document.getElementById('visualize-button').addEventListener('click', () => {
+  const visualizationSection = document.getElementById('visualization');
+  visualizationSection.scrollIntoView({ behavior: 'smooth' });
+});

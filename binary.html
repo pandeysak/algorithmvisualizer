@@ -1,36 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" href="binary.css" />
+  <title>Binary Search Visualization</title>
+  <link rel="stylesheet" href="binary.css">
 </head>
-
 <body>
-	<br />
-	<p class="header">Binary Search</p>
+  <header>
+    <h1>Binary Search Visualization</h1>
+  </header>
 
+  <main>
+    <section>
+      <h2>Binary Search</h2>
+      <p>
+        Binary search is an efficient searching algorithm for finding a specific value in a sorted array. It compares the target
+        value to the middle element of the array and repeatedly narrows down the search until the value is found or the
+        subarray becomes empty. It has a time complexity of O(log n).
+      </p>
+    </section>
 
+    <section>
+      <h2>Enter Sorted Array Elements</h2>
+      <input type="text" id="array-input" placeholder="Enter sorted array elements (comma-separated)">
+      <button id="sort-button" onclick="sortArray()">Sort Array</button>
+    </section>
 
+    <section>
+      <h2>Enter Search Element</h2>
+      <input type="text" id="search-element" placeholder="Enter search element">
+    </section>
 
-	<div id="array"></div>
-	<br /><br />
+    <div id="buttons">
+      <button id="visualize-button" onclick="visualizeBinarySearch()">Visualize</button>
+      <button id="back-button" onclick="goBackToHomePage()">Back</button>
+    </div>
+    <div id="visualization">
+      <canvas id="canvas" width="800" height="400"></canvas>
+    </div>
+    <div id="results">
+      <h2>Search Results</h2>
+      <p id="time-taken"></p>
+      <p id="result-message"></p>
+    </div>
+  </main>
 
-	<div style="text-align: center">
-	<label for="fname">
-		Number to be Searched:
-	</label>
-	<input type="text" id="fname"
-			name="fname" />
-	<br /><br />
-	<button id="btn"
-			onclick="BinarySearch()">Search</button>
-	<br />
-	<br />
-	<div id="text"></div>
-	</div>
-
-	<script src="binary.js"></script>
+  <script src="binary.js"></script>
 </body>
 </html>

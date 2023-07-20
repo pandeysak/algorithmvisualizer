@@ -1,0 +1,109 @@
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 1rem;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }
+  /* Add your CSS styling here */
+/* Define styles for container, buttons, input fields, etc. */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .algorithm-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .algorithm-container h2 {
+    margin-bottom: 10px;
+  }
+  /* Reset default button styles */
+
+  /* Reset default button styles */
+button {
+    margin: 0;
+    padding: 8px 16px;
+    border: none;
+    background-color: #5827b3;
+    color: #cfd9e0;
+    cursor: pointer;
+  }
+  
+  /* Arrange buttons vertically */
+  .button-container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  
+  /* .button-container {
+    margin-top: 20px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  } */
+  
+  .info-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .visualization-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 200px;
+    width: 500px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  
+  .bar {
+    width: 10px;
+    margin-right: 2px;
+    background-color: #3498db;
+  }
+  section {
+    text-align: center;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+  }
+  header {
+    background-color: #5c6bc0;
+    color: #fff;
+    text-align: center;
+    padding: 2rem;
+  }
+  /* main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+  }   */

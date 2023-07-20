@@ -1,23 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,
-	initial-scale=1.0">
+  <title>Merge Sort Visualization</title>
+  <link rel="stylesheet" href="bubble.css">
 </head>
-
 <body>
-	<h1 class="title" style = "color: rgb(111, 106, 189); font:lighter; ">
-		Merge Sort Visualizer</h1>
+  <header>
+    <h1>Merge Sort Visualization</h1>
+  </header>
 
-	<h2 class="title1" style = "background: rgb(111, 106, 189);
-	color: white; font: italic;">Array is not sorted
-	</h2>
+  <main>
+    <section>
+      <h2>Merge Sort</h2>
+      <p>
+        Merge sort is a divide and conquer algorithm that divides the input array into two halves, sorts each half, and then merges
+        the sorted halves to produce the final sorted array. It has an average-case and worst-case time complexity of O(n log n).
+      </p>
+    </section>
 
-	<canvas id="Canvas"></canvas>
-	
-	<script src="merge.js"></script>
+    <section>
+      <h2>Enter Array Elements</h2>
+      <input type="text" id="array-input" placeholder="Enter array elements (comma-separated)">
+    </section>
+
+    <div id="buttons">
+      <button id="visualize-button" onclick="visualizeMergeSort()">Visualize</button>
+      <button id="back-button" onclick="goBackToHomePage()">Back</button>
+    </div>
+
+    <div id="visualization">
+      <canvas id="canvas" width="800" height="400"></canvas>
+    </div>
+  </main>
+
+  <script src="merge.js"></script>
 </body>
-
 </html>

@@ -1,150 +1,127 @@
-// Canvas variables
-var canvas, canvaswidth, canvasheight, ctrl;
+let isSorting = false;
+let sortSteps = [];
+let canvas, ctx, width, height, barWidth, max;
 
-// Call canvasElements() to store height width
-// in above canvas variables
-canvasElements();
+function visualizeMergeSort() {
+  if (isSorting) {
+    return;
+  }
 
-// 3 array are declared
+  const arrayInput = document.getElementById('array-input').value.trim();
+  const array = arrayInput.split(',').map(Number);
+  if (array.some(isNaN)) {
+    alert('Please enter valid numbers for array elements.');
+    return;
+  }
 
-//1) arr is for storing array element
-//2) itmd for storing intermediate values
-//3) visited is for element which has been sorted
-var arr = [], itmd = [], visited = []
+  isSorting = true;
+  document.getElementById('visualize-button').disabled = true;
 
+  sortSteps = [];
+  mergeSort(array, 0, array.length - 1);
 
-// Length of unsorted array
-var len_of_arr = 40;
-
-// Store random value in arr[]
-for (var i = 0; i < len_of_arr; i++) {
-	arr.push(Math.round(Math.random() * 250) )
+  setupCanvas();
+  animateSortSteps();
 }
 
-// Initialize itmd and visited array with 0
-for (var i = 0; i < len_of_arr; i++) {
-	itmd.push(0)
-	visited.push(0)
+function mergeSort(array, left, right) {
+  if (left < right) {
+    const mid = Math.floor((left + right) / 2);
+
+    mergeSort(array, left, mid);
+    mergeSort(array, mid + 1, right);
+
+    merge(array, left, mid, right);
+  }
 }
 
-// Merging of two sub array
-// https://www.geeksforgeeks.org/merge-two-sorted-arrays/
-function mergeArray(start, end) {
-	let mid = parseInt((start + end) >> 1);
-	let start1 = start, start2 = mid + 1
-	let end1 = mid, end2 = end
-	
-	// Initial index of merged subarray
-	let index = start
+function merge(array, left, mid, right) {
+  const temp = [];
 
-	while (start1 <= end1 && start2 <= end2) {
-		if (arr[start1] <= arr[start2]) {
-			itmd[index] = arr[start1]
-			index = index + 1
-			start1 = start1 + 1;
-		}
-		else if(arr[start1] > arr[start2]) {
-			itmd[index] = arr[start2]
-			index = index + 1
-			start2 = start2 + 1;
-		}
-	}
+  let i = left;
+  let j = mid + 1;
 
-	// Copy the remaining elements of
-	// arr[], if there are any
-	while (start1 <= end1) {
-		itmd[index] = arr[start1]
-		index = index + 1
-		start1 = start1 + 1;
-	}
+  while (i <= mid && j <= right) {
+    sortSteps.push({ array: array.slice(), left, mid, right, currentIndex: [i, j] });
 
-	while (start2 <= end2) {
-		itmd[index] = arr[start2]
-		index = index + 1
-		start2 = start2 + 1;
-	}
+    if (array[i] < array[j]) {
+      temp.push(array[i]);
+      i++;
+    } else {
+      temp.push(array[j]);
+      j++;
+    }
+  }
 
-	index = start
-	while (index <= end) {
-		arr[index] = itmd[index];
-		index++;
-	}
+  while (i <= mid) {
+    temp.push(array[i]);
+    sortSteps.push({ array: array.slice(), left, mid, right, currentIndex: [i] });
+    i++;
+  }
+
+  while (j <= right) {
+    temp.push(array[j]);
+    sortSteps.push({ array: array.slice(), left, mid, right, currentIndex: [j] });
+    j++;
+  }
+
+  for (let k = left, m = 0; k <= right; k++, m++) {
+    array[k] = temp[m];
+    sortSteps.push({ array: array.slice(), left, mid, right, currentIndex: [k] });
+  }
 }
 
-// Function for showing visualization
-// effect
-function drawBars(start, end) {
-
-	// Clear previous unsorted bars
-	ctrl.clearRect(0, 0, 1000, 1500)
-
-	// Styling of bars
-	for (let i = 0; i < len_of_arr; i++) {
-
-		// Changing styles of bars
-		ctrl.fillStyle = "black"
-		ctrl.shadowOffsetX = 2
-		ctrl.shadowColor = "chocolate";
-		ctrl.shadowBlur = 3;
-		ctrl.shadowOffsetY =5;
-		
-		
-		// Size of rectangle of bars
-		ctrl.fillRect(25 * i, 300 - arr[i], 20, arr[i])
-		
-		if (visited[i]) {
-			ctrl.fillStyle = "#006d13"
-			ctrl.fillRect(25 * i, 300 - arr[i], 20, arr[i])
-			ctrl.shadowOffsetX = 2
-		}
-	}
-
-	for (let i = start; i <= end; i++) {
-		ctrl.fillStyle = "orange"
-		ctrl.fillRect(25 * i, 300 - arr[i], 18, arr[i])
-		ctrl.fillStyle = "#cdff6c"
-		ctrl.fillRect(25 * i,300, 18, arr[i])
-		visited[i] = 1
-	}
+function setupCanvas() {
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  width = canvas.width;
+  height = canvas.height;
+  barWidth = 40;
+  max = Math.max(...sortSteps[0].array);
 }
 
-// Waiting interval between two bars
-function timeout(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+function animateSortSteps() {
+  const step = sortSteps.shift();
+
+  if (!step) {
+    isSorting = false;
+    document.getElementById('visualize-button').disabled = false;
+    return;
+  }
+
+  const { array, left, mid, right, currentIndex } = step;
+  const barHeightUnit = height / max;
+
+  ctx.clearRect(0, 0, width, height);
+
+  for (let i = 0; i < array.length; i++) {
+    const barHeight = array[i] * barHeightUnit;
+    const x = (i * (barWidth + 10)) + 50;
+    const y = height - barHeight;
+
+    ctx.fillStyle = 'blue';
+    if (currentIndex.includes(i)) {
+      ctx.fillStyle = 'green';
+    } else if (i >= left && i <= right) {
+      ctx.fillStyle = 'red';
+    }
+    ctx.fillRect(x, y, barWidth, barHeight);
+
+    ctx.fillStyle = 'black';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(array[i], x + barWidth / 2, y - 5);
+  }
+
+  setTimeout(animateSortSteps, 1000); // Add a delay to show each step clearly
 }
 
-
-// Merge Sorting
-const mergeSort = async (start, end) => {
-	if (start < end) {
-		let mid = parseInt((start + end) >> 1)
-		await mergeSort(start, mid)
-		await mergeSort(mid + 1, end)
-		await mergeArray(start, end)
-		await drawBars(start, end)
-
-		// Waiting time is 800ms
-		await timeout(800)
-	}
+function goBackToHomePage() {
+  window.location.href = 'sorting.html';
 }
 
-// canvasElements function for storing
-// width and height in canvas variable
-function canvasElements() {
-	canvas = document.getElementById("Canvas")
-	canvas.width = canvas.height = 1000
-	canvaswidth = canvas.width
-	canvasheight = canvas.height
-	ctrl = canvas.getContext("2d")
-}
-
-// Asynchronous MergeSort function
-const performer = async () => {
-	await mergeSort(0, len_of_arr - 1)
-	await drawBars()
-
-	// Code for change title1 text
-	const title1_changer = document.querySelector(".title1")
-	title1_changer.innerText = "Array is completely sorted"
-}
-performer()
+// Automatically scroll down to the visualization section on "Visualize" button click
+document.getElementById('visualize-button').addEventListener('click', () => {
+  const visualizationSection = document.getElementById('visualization');
+  visualizationSection.scrollIntoView({ behavior: 'smooth' });
+});

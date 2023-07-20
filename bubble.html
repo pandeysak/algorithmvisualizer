@@ -1,19 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content=
-		"width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" href="bubble.css" />
+  <title>Bubble Sort Visualization</title>
+  <link rel="stylesheet" href="bubble.css">
 </head>
-
 <body>
-	<br />
-	<p class="header">Bubble Sort</p>
+  <header>
+    <h1>Bubble Sort Visualization</h1>
+  </header>
 
-	<div id="array"></div>
-	<script src="bubble.js"></script>
+  <main>
+    <section>
+      <h2>Bubble Sort</h2>
+      <p>
+        Bubble sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them
+        if they are in the wrong order. It has a worst-case and average-case time complexity of O(n^2).
+      </p>
+    </section>
+
+    <section>
+      <h2>Enter Array Elements</h2>
+      <input type="text" id="array-input" placeholder="Enter array elements (comma-separated)">
+    </section>
+
+    <div id="buttons">
+      <button id="visualize-button" onclick="visualizeBubbleSort()">Visualize</button>
+      <button id="back-button" onclick="goBackToHomePage()">Back</button>
+    </div>
+
+    <div id="visualization">
+      <canvas id="canvas" width="800" height="400"></canvas>
+    </div>
+  </main>
+
+  <script src="bubble.js"></script>
 </body>
-
 </html>

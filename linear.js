@@ -1,80 +1,106 @@
-var container = document.getElementById("array");
+let isSearching = false;
+let searchSteps = [];
+let canvas, ctx, width, height, barWidth, max, target;
 
-// Function to generate the array of blocks
-function generatearray() {
-for (var i = 0; i < 20; i++) {
-	// Return a value from 1 to 100 (both inclusive)
-	var value = Math.ceil(Math.random() * 100);
+function visualizeLinearSearch() {
+  if (isSearching) {
+    return;
+  }
 
-	// Creating element div
-	var array_ele = document.createElement("div");
+  const arrayInput = document.getElementById('array-input').value.trim();
+  const searchElement = document.getElementById('search-element').value.trim();
 
-	// Adding class 'block' to div
-	array_ele.classList.add("block");
+  const array = arrayInput.split(',').map(Number);
+  if (isNaN(searchElement) || array.some(isNaN)) {
+    alert('Please enter valid numbers for array elements and the search element.');
+    return;
+  }
 
-	// Adding style to div
-	array_ele.style.height = `${value * 3}px`;
-	array_ele.style.transform = `translate(${i * 30}px)`;
+  isSearching = true;
+  document.getElementById('visualize-button').disabled = true;
+  document.getElementById('results').style.display = 'none';
 
-	// Creating label element for displaying
-	// size of particular block
-	var array_ele_label = document.createElement("label");
-	array_ele_label.classList.add("block_id");
-	array_ele_label.innerText = value;
+  searchSteps = [];
+  target = Number(searchElement);
+  linearSearch(array);
 
-	// Appending created elements to index.html
-	array_ele.appendChild(array_ele_label);
-	container.appendChild(array_ele);
-}
-}
-
-// Asynchronous LinearSearch function
-async function LinearSearch(delay = 300) {
-var blocks = document.querySelectorAll(".block");
-var output = document.getElementById("text");
-
-//Extracting the value entered by the user
-var num = document.getElementById("fname").value;
-
-//Changing the color of all the blocks to violet
-for (var i = 0; i < blocks.length; i += 1) {
-	blocks[i].style.backgroundColor = "#6b5b95";
+  setupCanvas();
+  animateSearchSteps();
 }
 
-output.innerText = "";
+function linearSearch(array) {
+  for (let i = 0; i < array.length; i++) {
+    searchSteps.push({ array: array.slice(), currentIndex: i });
 
-var flag = 0;
-// LinearSearch Algorithm
-for (var i = 0; i < blocks.length; i += 1) {
-	//Changing the color of current block to red
-	blocks[i].style.backgroundColor = "#FF4949";
+    if (array[i] === target) {
+      isSearching = false;
+      document.getElementById('visualize-button').disabled = false;
+      displayResults('Element found at index ' + i);
+      return;
+    }
+  }
 
-	// To wait for .1 sec
-	await new Promise((resolve) =>
-	setTimeout(() => {
-		resolve();
-	}, delay)
-	);
-
-	//Extracting the value of current block
-	var value = Number(blocks[i].childNodes[0].innerHTML);
-
-	// To compare block value with entered value
-	if (value == num) {
-	flag = 1;
-	output.innerText = "Element Found";
-	blocks[i].style.backgroundColor = "#13CE66";
-	break;
-	} else {
-	// Changing the color to the previous one
-	blocks[i].style.backgroundColor = "#6b5b95";
-	}
-}
-//When element is not found in the array
-if (flag == 0) {
-	output.innerText = "Element Not Found";
-}
+  isSearching = false;
+  document.getElementById('visualize-button').disabled = false;
+  displayResults('Element not found in the array');
 }
 
-// Calling generatearray function
-generatearray();
+function setupCanvas() {
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  width = canvas.width;
+  height = canvas.height;
+  barWidth = 40;
+  max = Math.max(...searchSteps[0].array);
+}
+
+function animateSearchSteps() {
+  const step = searchSteps.shift();
+
+  if (!step) {
+    return;
+  }
+
+  const { array, currentIndex } = step;
+  const barHeightUnit = height / max;
+
+  ctx.clearRect(0, 0, width, height);
+
+  for (let i = 0; i < array.length; i++) {
+    const barHeight = array[i] * barHeightUnit;
+    const x = (i * (barWidth + 10)) + 50;
+    const y = height - barHeight;
+
+    ctx.fillStyle = 'blue';
+    if (i === currentIndex) {
+      ctx.fillStyle = 'green';
+    }
+    ctx.fillRect(x, y, barWidth, barHeight);
+
+    ctx.fillStyle = 'black';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(array[i], x + barWidth / 2, y - 5);
+  }
+
+  setTimeout(animateSearchSteps, 1000); // Add a delay to show each step clearly
+}
+
+function displayResults(message) {
+  const resultsDiv = document.getElementById('results');
+  const resultMessageParagraph = document.getElementById('result-message');
+
+  resultMessageParagraph.textContent = message;
+
+  resultsDiv.style.display = 'block';
+}
+
+function goBackToHomePage() {
+  window.location.href = 'searching.html';
+}
+
+// Automatically scroll down to the visualization section on "Visualize" button click
+document.getElementById('visualize-button').addEventListener('click', () => {
+  const visualizationSection = document.getElementById('visualization');
+  visualizationSection.scrollIntoView({ behavior: 'smooth' });
+});

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CPU Scheduling Algorithm Visualizer</title>
+  <link rel="stylesheet" href="cpu.css">
+</head>
+<body>
+    
+    
+        <header>
+            <h1>CPU scheduling Algorithm Visualizer</h1>
+        <p>CPU Scheduling Algorithms are essential components of operating systems that manage the execution of multiple processes on a single CPU. The main goal of these algorithms is to efficiently allocate CPU time to various processes to maximize system throughput, minimize response time, and ensure fair process execution. Different scheduling algorithms employ distinct strategies to prioritize and allocate CPU time to processes based on their characteristics and system requirements.</p>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="dsa.html">DSA Visualizer</a>
+          <a href="os.html">OS Visualizer</a>
+        </nav></header>
+       
+ 
+      
+      
+      <main>
+       <div class="button-container">
+        <h2>FCFS(first come first serve)</h2>
+        <p>
+          <button class="button" id="button" onclick="visualizeFCFS()">FCFS</button>
+        </p>
+    
+        <h2>SJN(Shortest Job next)</h2>
+        <p>
+          <button class="button" id="button" onclick="visualizeSJF()">SJN</button>
+        </p>
+    
+        <h2>RR(Round Robin)</h2>
+        <p>
+          <button class="button" id="button" onclick="visualizeRR()">RR</button>
+        </p>
+        </div>
+        <br>
+        <div class="button-container">
+            <h2>Priority</h2>
+        <p>
+          <button class="button" id="button" onclick="visualizePriority()">PRIORITY</button>
+        </p>
+    
+        <h2>SJF Preemptive(Shortest Job first)</h2>
+        <p>
+          <button class="button" id="button" onclick="visualizeSJFPreemptive()">visualizeSJF</button>
+        </p></div>
+        
+   
+    
+    </main>
+  <div class="info-container">
+    <h3 id="algorithmName"></h3>
+    <p id="algorithmDescription"></p>
+  </div>
+
+  <div class="visualization-container" id="visualizationContainer"></div>
+
+  <script src="cpu.js"></script>
+</body>
+</html>

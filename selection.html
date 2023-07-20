@@ -1,35 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- head -->
+<html>
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	
-	<!-- title -->
-	<title>Sorting Visualizer</title>
-
-	<!-- linking selection.css -->
-	<link href="selection.css" rel="stylesheet" />
+  <title>Selection Sort Visualization</title>
+  <link rel="stylesheet" href="bubble.css">
 </head>
+<body>
+  <header>
+    <h1>Selection Sort Visualization</h1>
+  </header>
 
-<!-- body -->
-<body >
-<section class="head">Selection Sort Visualizer</section>
-<section class="data-container"></section>
-	
-<!-- "Generate New Array" button -->
-<button class="btn1" onclick="generate()" id="Button1" >
-	Generate New Array</button>
-	
-<!-- "Selection Sort" button -->
-<button class="btn2"
-		onclick="SelectionSort(),disable()" id="Button2" >
-	Selection Sort</button>
+  <main>
+    <section>
+      <h2>Selection Sort</h2>
+      <p>
+        Selection sort is a simple in-place comparison-based sorting algorithm. It has an average-case and worst-case time complexity
+        of O(n^2).
+      </p>
+    </section>
+
+    <section>
+      <h2>Enter Array Elements</h2>
+      <input type="text" id="array-input" placeholder="Enter array elements (comma-separated)">
+    </section>
+
+    <div id="buttons">
+      <button id="visualize-button" onclick="visualizeSelectionSort()">Visualize</button>
+      <button id="back-button" onclick="goBackToHomePage()">Back</button>
+    </div>
+
+    <div id="visualization">
+      <canvas id="canvas" width="800" height="400"></canvas>
+    </div>
+  </main>
+
+  <script src="selection.js"></script>
 </body>
-
-<!-- linking selection.js -->
-<script src="selection.js"></script>
 </html>

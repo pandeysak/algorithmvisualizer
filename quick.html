@@ -1,21 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-	<link rel="stylesheet" href="quick.css" />
+  <title>Quick Sort Visualization</title>
+  <link rel="stylesheet" href="bubble.css">
 </head>
-
 <body>
-	<br />
-	<p class="header">Quick Sort (Hoare's Partition)</p>
+  <header>
+    <h1>Quick Sort Visualization</h1>
+  </header>
 
+  <main>
+    <section>
+      <h2>Quick Sort</h2>
+      <p>
+        Quick sort is a divide and conquer algorithm that selects a pivot element and partitions the input array into two
+        subarrays: elements less than the pivot and elements greater than the pivot. It then recursively sorts the subarrays. It has an average-case time complexity of O(n log n) but can degrade to O(n^2) in the worst-case.
+      </p>
+    </section>
 
-	<div id="array"></div>
-	<div id="count"></div>
-	<br />
-	<h2 class="range" style="text-align: center"></h2>
+    <section>
+      <h2>Enter Array Elements</h2>
+      <input type="text" id="array-input" placeholder="Enter array elements (comma-separated)">
+    </section>
 
-	<script src="quick.js"></script>
+    <div id="buttons">
+      <button id="visualize-button" onclick="visualizeQuickSort()">Visualize</button>
+      <button id="back-button" onclick="goBackToHomePage()">Back</button>
+    </div>
+
+    <div id="visualization">
+      <canvas id="canvas" width="800" height="400"></canvas>
+    </div>
+  </main>
+
+  <script src="quick.js"></script>
 </body>
-
 </html>

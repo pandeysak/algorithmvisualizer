@@ -1,82 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sortingvisualizer</title>
-    <link rel="stylesheet" href="sorting.css">
-    <link rel="stylesheet" href="global.css">
+  <title>Sorting Algorithms Visualization</title>
+  <link rel="stylesheet" href="sorting.css">
 </head>
 <body>
+  <header>
+    <header>
+        <h1>Sorting Algorithms</h1>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="searching.html">searching</a>
+          <a href="sorting.html">Sorting visualizer</a>
     
-    <nav>
-        <label class="logo">Sorting</label>
-        <ul>
-            <li><a href="bubble.html">bubblesort</a></li>
-            <li><a href="insertion.html">insertionsort</a></li>
-            <li><a href="selection.html">selectionsort</a></li>
-            <li><a href="merge.html">mergesort</a></li>
-            <li><a href="quick.html">quicksort</a></li>
-            
-            
-        </ul>
-    </nav>
-    <div class="section">
-        <div class="text">
-            
-    <p><strong>Bubblesort</strong> Bubble Sort is the simplest sorting algorithm that works by repeatedly swapping the adjacent
-         elements if they are in the wrong order. This algorithm is not suitable for large data sets as its average and worst-case
-          time complexity is quite high.</p>
-        <p>Time complexity =O(n*n) in worst case</p>
-    
-        </div>
-        <img src="Screenshot_20230214_221300.png">
-        
-    </div>
-    
-    <div class="section">
-       <div class="text"><p><strong>Insertionsort</strong> The idea behind the insertion sort is that first take one element, iterate it through 
-        the sorted array. Although it is simple to use, it is not appropriate for large data sets as the time complexity of insertion sort in the
-         average case and worst case is O(n2), where n is the number of items. Insertion sort is less efficient than the other sorting algorithms
-          like heap sort, quick sort, merge sort, etc.
-       </div>
-       <img src="Screenshot_20230214_221607.png">
-    </div>
-    <div class="section">
-        <div class="text"><p><strong>Selectionsort</strong>Selection sort is a simple and efficient sorting algorithm that works by repeatedly 
-            selecting the smallest (or largest) element from the unsorted portion of the list and moving it to the sorted portion of the list. 
-            The algorithm repeatedly selects the smallest (or largest) element from the unsorted portion of the list and swaps it with the first
-             element of the unsorted portion. This process is repeated for the remaining unsorted portion of the list until the entire list is sorted
-           divide the search space in half. </p>
-         <p>Time complexity of Binary search is O(n*n) in worst case</p>
-        </div>
-        <img src="Screenshot_20230214_221640.png">
-     </div>
-     <div class="section">
-        <div class="text"><p><strong>Mergesort</strong> Merge sort is a sorting algorithm that works by dividing an 
-            array into smaller subarrays,sorting each subarray, and then merging the sorted subarrays back together to
-             form the final sorted array. </p>
-         <p>Time complexity = O(nlogn) in worst case</p>
-        </div>
-         <img src="Screenshot_20230214_221804.png">
-     </div>
-     <div class="section">
-            <div class="text"><p><strong>Quicksort</strong> QuickSort is a Divide and Conquer algorithm. It picks an element 
-                as a pivot and partitions the given array around the picked pivot. There are many different versions of quickSort
-                 that pick pivot in different ways. 
+        </nav>
+      </header>
+  </header>
 
-                ->Always pick the first element as a pivot.
-                ->Always pick the last element as a pivot (implemented below)
-                ->Pick a random element as a pivot.
-                ->Pick median as the pivot.</p>
-             <p>Time complexity of Binary search is O(n*n) in worst case</p>
-            </div>
-            <img src="Screenshot_20230214_221829.png">
-         </div>
-    <h5>for visulation of the algorithm click on the navigation bar</h5>
+  <main>
+    <section>
+      <h2>Bubble Sort</h2>
+      <p>
+        Bubble sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them
+        if they are in the wrong order. It has a worst-case and average-case time complexity of O(n^2).
+      </p>
+      <a href="bubble.html" class="btn">Explore bubble sort Algorithm</a>
+    </section>
+
+    <section>
+      <h2>Insertion Sort</h2>
+      <p>
+        Insertion sort is a simple sorting algorithm that builds the final sorted array one item at a time. It is much less
+        efficient on large lists compared to more advanced algorithms such as Merge Sort and Quick Sort. It has a worst-case and
+        average-case time complexity of O(n^2).
+      </p>
+      <a href="insertion.html" class="btn">Explore Insertion sort Algorithm</a>
+    </section>
+
+    <section>
+      <h2>Selection Sort</h2>
+      <p>
+        Selection sort is a simple in-place comparison-based sorting algorithm. It has an average-case and worst-case time complexity
+        of O(n^2).
+      </p>
+      <a href="selection.html" class="btn">Explore Selection sort Algorithm</a>
+    </section>
+
+    <section>
+      <h2>Merge Sort</h2>
+      <p>
+        Merge sort is a divide and conquer algorithm that divides the input array into two halves, sorts each half, and then merges
+        the sorted halves to produce the final sorted array. It has an average-case and worst-case time complexity of O(n log n).
+      </p>
+      <a href="merge.html" class="btn">Explore Merge sort Algorithm</a>
+    </section>
+
+    <section>
+      <h2>Quick Sort</h2>
+      <p>
+        Quick sort is a divide and conquer sorting algorithm that works by selecting a pivot element from the array and partitioning
+        the other elements into two sub-arrays according to whether they are less than or greater than the pivot. It has an average-case
+        time complexity of O(n log n) and a worst-case time complexity of O(n^2).
+      </p>
+      <a href="quick.html" class="btn">Explore Quick sort Algorithm</a>
+    </section>
+
+    
 </body>
 </html>
-<footer>
-    <h6>@Sakshikumari</h6>
-</footer>

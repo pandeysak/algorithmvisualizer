@@ -1,33 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
-	
-<!-- head -->
+<html>
 <head>
-	
-	<!-- linking style.css -->
-	<link href="insertion.css" rel="stylesheet" />
+  <title>Insertion Sort Visualization</title>
+  <link rel="stylesheet" href="bubble.css">
 </head>
-
-<!-- body -->
 <body>
-	<section class="head">Insertion Sort</section>
-	<section class="data-container"></section>
-	<section id="ele"></section>
-	<div style="margin: auto; width: fit-content;">
+  <header>
+    <h1>Insertion Sort Visualization</h1>
+  </header>
 
-	<!-- "Generate New Array" button -->
-<button class="btn1"
-		onclick="generate()" id="Button1" >
-	Generate New Array</button>
-	
-<!-- "Insertion Sort" button -->
-<button class="btn2"
-		onclick="InsertionSort(),disable()"
-		id="Button2" >
-	Insertion Sort</button>
-	</div>	
+  <main>
+    <section>
+      <h2>Insertion Sort</h2>
+      <p>
+        Insertion sort is a simple sorting algorithm that builds the final sorted array one item at a time. It is much less
+        efficient on large lists compared to more advanced algorithms such as Merge Sort and Quick Sort. It has a worst-case and
+        average-case time complexity of O(n^2).
+      </p>
+    </section>
+
+    <section>
+      <h2>Enter Array Elements</h2>
+      <input type="text" id="array-input" placeholder="Enter array elements (comma-separated)">
+    </section>
+
+    <div id="buttons">
+      <button id="visualize-button" onclick="visualizeInsertionSort()">Visualize</button>
+      <button id="back-button" onclick="goBackToHomePage()">Back</button>
+    </div>
+
+    <div id="visualization">
+      <canvas id="canvas" width="800" height="400"></canvas>
+    </div>
+  </main>
+
+  <script src="insertion.js"></script>
 </body>
-
-<!-- linking index.js -->
-<script src="insertion.js"></script>
 </html>

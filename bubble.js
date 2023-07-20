@@ -1,99 +1,102 @@
-var container = document.getElementById("array");
+let isSorting = false;
+let sortSteps = [];
+let canvas, ctx, width, height, barWidth, max;
 
-// Function to generate the array of blocks
-function generatearray() {
-	for (var i = 0; i < 20; i++) {
+function visualizeBubbleSort() {
+  if (isSorting) {
+    return;
+  }
 
-		// Return a value from 1 to 100 (both inclusive)
-		var value = Math.ceil(Math.random() * 100);
+  const arrayInput = document.getElementById('array-input').value.trim();
+  const array = arrayInput.split(',').map(Number);
+  if (array.some(isNaN)) {
+    alert('Please enter valid numbers for array elements.');
+    return;
+  }
 
-		// Creating element div
-		var array_ele = document.createElement("div");
+  isSorting = true;
+  document.getElementById('visualize-button').disabled = true;
 
-		// Adding class 'block' to div
-		array_ele.classList.add("block");
+  sortSteps = [];
+  bubbleSort(array);
 
-		// Adding style to div
-		array_ele.style.height = `${value * 3}px`;
-		array_ele.style.transform = `translate(${i * 30}px)`;
-
-		// Creating label element for displaying
-		// size of particular block
-		var array_ele_label = document.createElement("label");
-		array_ele_label.classList.add("block_id");
-		array_ele_label.innerText = value;
-
-		// Appending created elements to index.html
-		array_ele.appendChild(array_ele_label);
-		container.appendChild(array_ele);
-	}
+  setupCanvas();
+  animateSortSteps();
 }
 
-// Promise to swap two blocks
-function swap(el1, el2) {
-	return new Promise((resolve) => {
+function bubbleSort(array) {
+  const n = array.length;
 
-		// For exchanging styles of two blocks
-		var temp = el1.style.transform;
-		el1.style.transform = el2.style.transform;
-		el2.style.transform = temp;
+  for (let i = 0; i < n - 1; i++) {
+    let swapped = false;
 
-		window.requestAnimationFrame(function() {
+    for (let j = 0; j < n - i - 1; j++) {
+      sortSteps.push({ array: array.slice(), currentIndex: j });
 
-			// For waiting for .25 sec
-			setTimeout(() => {
-				container.insertBefore(el2, el1);
-				resolve();
-			}, 250);
-		});
-	});
+      if (array[j] > array[j + 1]) {
+        // Swap elements
+        [array[j], array[j + 1]] = [array[j + 1], array[j]];
+        swapped = true;
+      }
+    }
+
+    if (!swapped) {
+      // Array is already sorted, no need to continue
+      break;
+    }
+  }
+
+  isSorting = false;
+  document.getElementById('visualize-button').disabled = false;
 }
 
-// Asynchronous BubbleSort function
-async function BubbleSort(delay = 100) {
-	var blocks = document.querySelectorAll(".block");
-
-	// BubbleSort Algorithm
-	for (var i = 0; i < blocks.length; i += 1) {
-		for (var j = 0; j < blocks.length - i - 1; j += 1) {
-
-			// To change background-color of the
-			// blocks to be compared
-			blocks[j].style.backgroundColor = "#FF4949";
-			blocks[j + 1].style.backgroundColor = "#FF4949";
-
-			// To wait for .1 sec
-			await new Promise((resolve) =>
-				setTimeout(() => {
-					resolve();
-				}, delay)
-			);
-
-			console.log("run");
-			var value1 = Number(blocks[j].childNodes[0].innerHTML);
-			var value2 = Number(blocks[j + 1]
-						.childNodes[0].innerHTML);
-
-			// To compare value of two blocks
-			if (value1 > value2) {
-				await swap(blocks[j], blocks[j + 1]);
-				blocks = document.querySelectorAll(".block");
-			}
-
-			// Changing the color to the previous one
-			blocks[j].style.backgroundColor = "#6b5b95";
-			blocks[j + 1].style.backgroundColor = "#6b5b95";
-		}
-
-		//changing the color of greatest element
-		//found in the above traversal
-		blocks[blocks.length - i - 1]
-				.style.backgroundColor = "#13CE66";
-	}
+function setupCanvas() {
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  width = canvas.width;
+  height = canvas.height;
+  barWidth = 40;
+  max = Math.max(...sortSteps[0].array);
 }
 
-// Calling generatearray function
-generatearray();
+function animateSortSteps() {
+  const step = sortSteps.shift();
 
-// Calling BubbleSort function
-BubbleSort();
+  if (!step) {
+    return;
+  }
+
+  const { array, currentIndex } = step;
+  const barHeightUnit = height / max;
+
+  ctx.clearRect(0, 0, width, height);
+
+  for (let i = 0; i < array.length; i++) {
+    const barHeight = array[i] * barHeightUnit;
+    const x = (i * (barWidth + 10)) + 50;
+    const y = height - barHeight;
+
+    ctx.fillStyle = 'blue';
+    if (i === currentIndex || i === currentIndex + 1) {
+      ctx.fillStyle = 'green';
+    }
+    ctx.fillRect(x, y, barWidth, barHeight);
+
+    ctx.fillStyle = 'black';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(array[i], x + barWidth / 2, y - 5);
+  }
+
+  setTimeout(animateSortSteps, 1000); // Add a delay to show each step clearly
+}
+
+function goBackToHomePage() {
+  window.location.href = 'sorting.html';
+}
+
+// Automatically scroll down to the visualization section on "Visualize" button click
+document.getElementById('visualize-button').addEventListener('click', () => {
+  const visualizationSection = document.getElementById('visualization');
+  visualizationSection.scrollIntoView({ behavior: 'smooth' });
+});

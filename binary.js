@@ -1,105 +1,134 @@
-var container = document.getElementById("array");
+let isSearching = false;
+let searchSteps = [];
+let canvas, ctx, width, height, barWidth, max, target;
 
-// Function to generate the array of blocks
-function generatearray() {
-
-// Creating an array
-var arr = [];
-
-// Filling array with random values
-for (var i = 0; i < 20; i++) {
-	// Return a value from 1 to 100 (both inclusive)
-	var val = Number(Math.ceil(Math.random() * 100));
-	arr.push(val);
+function sortArray() {
+  const arrayInput = document.getElementById('array-input').value.trim();
+  const sortedArray = arrayInput.split(',').map(Number).sort((a, b) => a - b);
+  document.getElementById('array-input').value = sortedArray.join(',');
 }
 
-// Sorting Array in ascending order
-arr.sort(function (a, b) {
-	return a - b;
+function visualizeBinarySearch() {
+  if (isSearching) {
+    return;
+  }
+
+  const arrayInput = document.getElementById('array-input').value.trim();
+  const searchElement = document.getElementById('search-element').value.trim();
+
+  const array = arrayInput.split(',').map(Number);
+  if (isNaN(searchElement) || array.some(isNaN)) {
+    alert('Please enter valid numbers for array elements and the search element.');
+    return;
+  }
+
+  if (!isSorted(array)) {
+    alert('Please make sure the array is sorted before visualizing binary search.');
+    return;
+  }
+
+  isSearching = true;
+  document.getElementById('visualize-button').disabled = true;
+  document.getElementById('results').style.display = 'none';
+
+  searchSteps = [];
+  target = Number(searchElement);
+  binarySearch(array, 0, array.length - 1);
+
+  setupCanvas();
+  animateSearchSteps();
+}
+
+function isSorted(array) {
+  for (let i = 1; i < array.length; i++) {
+    if (array[i] < array[i - 1]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function binarySearch(array, left, right) {
+  if (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    searchSteps.push({ array: array.slice(), left, right, mid });
+
+    if (array[mid] === target) {
+      isSearching = false;
+      document.getElementById('visualize-button').disabled = false;
+      displayResults('Element found at index ' + mid);
+      return;
+    } else if (array[mid] < target) {
+      return binarySearch(array, mid + 1, right);
+    } else {
+      return binarySearch(array, left, mid - 1);
+    }
+  }
+
+  isSearching = false;
+  document.getElementById('visualize-button').disabled = false;
+  displayResults('Element not found in the array');
+}
+
+function setupCanvas() {
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  width = canvas.width;
+  height = canvas.height;
+  barWidth = 40;
+  max = Math.max(...searchSteps[0].array);
+}
+
+function animateSearchSteps() {
+  const step = searchSteps.shift();
+
+  if (!step) {
+    return;
+  }
+
+  const { array, left, right, mid } = step;
+  const barHeightUnit = height / max;
+
+  ctx.clearRect(0, 0, width, height);
+
+  for (let i = 0; i < array.length; i++) {
+    const barHeight = array[i] * barHeightUnit;
+    const x = (i * (barWidth + 10)) + 50;
+    const y = height - barHeight;
+
+    ctx.fillStyle = 'blue';
+    if (i === mid) {
+      ctx.fillStyle = 'green';
+    } else if (i >= left && i <= right) {
+      ctx.fillStyle = 'orange';
+    }
+    ctx.fillRect(x, y, barWidth, barHeight);
+
+    ctx.fillStyle = 'black';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(array[i], x + barWidth / 2, y - 5);
+  }
+
+  setTimeout(animateSearchSteps, 1000);
+}
+
+function displayResults(message) {
+  const resultsDiv = document.getElementById('results');
+  const resultMessageParagraph = document.getElementById('result-message');
+
+  resultMessageParagraph.textContent = message;
+
+  resultsDiv.style.display = 'block';
+}
+
+function goBackToHomePage() {
+  window.location.href = 'searching.html';
+}
+
+
+// Automatically scroll down to the visualization section on "Visualize" button click
+document.getElementById('visualize-button').addEventListener('click', () => {
+  const visualizationSection = document.getElementById('visualization');
+  visualizationSection.scrollIntoView({ behavior: 'smooth' });
 });
-
-for (var i = 0; i < 20; i++) {
-	var value = arr[i];
-
-	// Creating element div
-	var array_ele = document.createElement("div");
-
-	// Adding class 'block' to div
-	array_ele.classList.add("block");
-
-	// Adding style to div
-	array_ele.style.height = `${value * 3}px`;
-	array_ele.style.transform = `translate(${i * 30}px)`;
-
-	// Creating label element for displaying
-	// size of particular block
-	var array_ele_label = document.createElement("label");
-	array_ele_label.classList.add("block_id");
-	array_ele_label.innerText = value;
-
-	// Appending created elements to index.html
-	array_ele.appendChild(array_ele_label);
-	container.appendChild(array_ele);
-}
-}
-
-// Asynchronous BinarySearch function
-async function BinarySearch(delay = 300) {
-var blocks = document.querySelectorAll(".block");
-var output = document.getElementById("text");
-
-//Extracting the value of the element to be searched
-var num = document.getElementById("fname").value;
-
-//Colouring all the blocks violet
-for (var i = 0; i < blocks.length; i += 1) {
-	blocks[i].style.backgroundColor = "#6b5b95";
-}
-
-output.innerText = "";
-
-// BinarySearch Algorithm
-
-var start = 0;
-var end = 19;
-var flag = 0;
-while (start <= end) {
-	//Middle index
-	var mid = Math.floor((start + end) / 2);
-	blocks[mid].style.backgroundColor = "#FF4949";
-
-	//Value at mid index
-	var value = Number(blocks[mid].childNodes[0].innerHTML);
-
-	// To wait for .1 sec
-	await new Promise((resolve) =>
-	setTimeout(() => {
-		resolve();
-	}, delay)
-	);
-
-	//Current element is equal to the element
-	//entered by the user
-	if (value == num) {
-	output.innerText = "Element Found";
-	blocks[mid].style.backgroundColor = "#13CE66";
-	flag = 1;
-	break;
-	}
-	//Current element is greater than the element
-	//entered by the user
-	if (value > num) {
-	end = mid - 1;
-	blocks[mid].style.backgroundColor = "#6b5b95";
-	} else {
-	start = mid + 1;
-	blocks[mid].style.backgroundColor = "#6b5b95";
-	}
-}
-if (flag === 0) {
-	output.innerText = "Element Not Found";
-}
-}
-
-// Calling generatearray function
-generatearray();
